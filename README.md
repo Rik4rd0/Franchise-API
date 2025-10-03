@@ -220,12 +220,6 @@ echo "SPRING_PROFILES_ACTIVE=prod" >> .env
 docker-compose -f docker-compose.prod.yml --env-file .env up
 ```
 
-**Para servicios en la nube:**
-- AWS: Usar AWS Systems Manager Parameter Store o AWS Secrets Manager
-- Azure: Usar Azure Key Vault
-- Google Cloud: Usar Secret Manager
-- Heroku: Configurar variables en el dashboard
-
 ### Health Checks
 
 La aplicación incluye endpoints de salud:
@@ -265,55 +259,7 @@ docker-compose up --scale app=2
 docker-compose build app
 ```
 
-### Despliegue en Producción
-
-#### Opción 1: Usando Variables de Entorno
-
-```bash
-# 1. Configurar variables de entorno
-export MONGODB_URI="tu-mongodb-atlas-uri-completo"
-export SPRING_PROFILES_ACTIVE="prod"
-
-# 2. Compilar aplicación
-mvn clean package -DskipTests
-
-# 3. Ejecutar
-java -jar target/franchise-api-*.jar
-```
-
-#### Opción 2: Docker con Archivo .env
-
-```bash
-# 1. Crear archivo .env (NO subir a Git)
-cat > .env << EOF
-MONGODB_URI=mongodb+srv://user:pass@cluster.mongodb.net/db
-SPRING_PROFILES_ACTIVE=prod
-PORT=8081
-JAVA_OPTS=-Xmx1g -Xms512m -server
-EOF
-
-# 2. Desplegar con Docker Compose
-docker-compose -f docker-compose.prod.yml --env-file .env up -d
-```
-
-#### Opción 3: Heroku
-
-```bash
-# 1. Instalar Heroku CLI y hacer login
-heroku login
-
-# 2. Crear aplicación
-heroku create tu-franchise-api
-
-# 3. Configurar variables de entorno
-heroku config:set MONGODB_URI="tu-mongodb-atlas-uri"
-heroku config:set SPRING_PROFILES_ACTIVE="prod"
-
-# 4. Desplegar
-git push heroku main
-```
-
-## ☁️ Despliegue en la Nube
+e
 
 ### GitHub Container Registry
 
@@ -322,80 +268,6 @@ La aplicación se empaqueta automáticamente en Docker y se sube a GitHub Contai
 ```bash
 # La imagen estará disponible en:
 # ghcr.io/tu-usuario/franchise-api:latest
-```
-
-### AWS ECS (Elastic Container Service)
-
-```bash
-# 1. Configurar AWS CLI
-aws configure
-
-# 2. Crear parámetros en Systems Manager
-aws ssm put-parameter \
-    --name "/franchise-api/mongodb-uri" \
-    --value "tu-mongodb-atlas-uri" \
-    --type "SecureString"
-
-# 3. Ejecutar script de despliegue
-chmod +x deploy/aws-ecs-deploy.sh
-./deploy/aws-ecs-deploy.sh
-```
-
-### Kubernetes (GKE, EKS, AKS)
-
-```bash
-# 1. Configurar kubectl
-kubectl config current-context
-
-# 2. Crear namespace
-kubectl create namespace franchise-api
-
-# 3. Actualizar secret con tu MongoDB URI
-kubectl create secret generic franchise-api-secrets \
-    --from-literal=mongodb-uri="tu-mongodb-atlas-uri" \
-    --namespace franchise-api
-
-# 4. Desplegar aplicación
-kubectl apply -f deploy/kubernetes/deployment.yaml -n franchise-api
-
-# 5. Verificar despliegue
-kubectl get pods -n franchise-api
-kubectl get services -n franchise-api
-```
-
-### Google Cloud Run
-
-```bash
-# 1. Configurar gcloud
-gcloud auth login
-gcloud config set project tu-proyecto-id
-
-# 2. Desplegar desde imagen
-gcloud run deploy franchise-api \
-    --image ghcr.io/tu-usuario/franchise-api:latest \
-    --platform managed \
-    --region us-central1 \
-    --allow-unauthenticated \
-    --port 8081 \
-    --set-env-vars SPRING_PROFILES_ACTIVE=prod \
-    --set-env-vars MONGODB_URI="tu-mongodb-atlas-uri"
-```
-
-### Azure Container Instances
-
-```bash
-# 1. Crear grupo de recursos
-az group create --name franchise-api-rg --location eastus
-
-# 2. Desplegar contenedor
-az container create \
-    --resource-group franchise-api-rg \
-    --name franchise-api \
-    --image ghcr.io/tu-usuario/franchise-api:latest \
-    --dns-name-label franchise-api-unique \
-    --ports 8081 \
-    --environment-variables SPRING_PROFILES_ACTIVE=prod \
-    --secure-environment-variables MONGODB_URI="tu-mongodb-atlas-uri"
 ```
 
 ## 📊 Monitoreo y Logs
