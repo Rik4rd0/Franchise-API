@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   franchise-api:
     build:
@@ -8,27 +6,18 @@ services:
     ports:
       - "8081:8081"
     environment:
-      - SPRING_PROFILES_ACTIVE=docker
-      - MONGODB_URI=mongodb://mongodb:27017/franchise-api-db
-    depends_on:
-      - mongodb
+      - SPRING_PROFILES_ACTIVE=dev
+      - DB_PASSWORD=${DB_PASSWORD}
+      - PORT=8081
     networks:
       - franchise-network
-
-  mongodb:
-    image: mongo:7.0
-    ports:
-      - "27017:27017"
-    environment:
-      - MONGO_INITDB_DATABASE=franchise-api-db
-    volumes:
-      - mongodb_data:/data/db
-    networks:
-      - franchise-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
 
 networks:
   franchise-network:
     driver: bridge
-
-volumes:
-  mongodb_data:

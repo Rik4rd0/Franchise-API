@@ -1,51 +1,42 @@
-# Stage 1: Build
+# Etapa de construcción
 FROM eclipse-temurin:21-jdk-alpine AS builder
 
 WORKDIR /app
 
-# Instalar Maven
 RUN apk add --no-cache maven
 
-# Copiar archivos de Maven primero (para cachear dependencias)
 COPY pom.xml .
-COPY .mvn .mvn 2>/dev/null || true
 
-# Descargar dependencias (esta capa se cachea)
-RUN mvn dependency:go-offline -B -q || mvn dependency:resolve -B -q
+# Si NO usas Maven Wrapper (.mvn), elimina la siguiente línea:
+# COPY .mvn .mvn/
 
-# Copiar código fuente
+RUN mvn dependency:go-offline -B
+
 COPY src ./src
 
-# Compilar aplicación
-RUN mvn clean package -DskipTests -B -q
+RUN mvn clean package -DskipTests
 
-# Stage 2: Runtime optimizado para Render
+# Etapa de runtime
 FROM eclipse-temurin:21-jre-alpine AS runtime
-
-# Instalar curl para health checks
-RUN apk add --no-cache curl tzdata
-
-# Crear usuario no-root
-RUN addgroup -g 1001 -S appgroup && \
-    adduser -u 1001 -S appuser -G appgroup
 
 WORKDIR /app
 
-# Copiar JAR desde builder
+RUN addgroup -g 1001 -S appuser && \
+    adduser -S -D -H -u 1001 -h /app -s /sbin/nologin -G appuser appuser
+
+RUN apk add --no-cache curl
+
 COPY --from=builder /app/target/*.jar app.jar
 
-# Cambiar ownership
-RUN chown -R appuser:appgroup /app
+RUN chown appuser:appuser app.jar
 
 USER appuser
 
-# Variables de entorno optimizadas para Render
-ENV JAVA_OPTS="-XX:MaxRAMPercentage=75.0 -XX:+UseContainerSupport -XX:+UnlockExperimentalVMOptions -XX:+UseZGC"
+EXPOSE 8082
 
-EXPOSE ${PORT:-8081}
+ENV JAVA_OPTS="-Xmx512m -Xms256m"
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
-    CMD curl -f http://localhost:${PORT:-8081}/actuator/health || exit 1
+HEALTHCHECK --interval=30s --timeout=3s --start-period=60s --retries=3 \
+    CMD curl -f http://localhost:8081/actuator/health || exit 1
 
-ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -Dserver.port=${PORT:-8081} -jar app.jar"]
+ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
