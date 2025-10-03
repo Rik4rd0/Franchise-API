@@ -1,5 +1,6 @@
-package com.franchise.api.application.service;
+package com.franchise.api.service;
 
+import com.franchise.api.application.service.AddFranchiseUseCase;
 import com.franchise.api.application.usecase.AddFranchiseCommand;
 import com.franchise.api.application.usecase.FranchiseResponse;
 import com.franchise.api.domain.entity.Franchise;

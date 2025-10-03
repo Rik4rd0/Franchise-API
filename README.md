@@ -6,10 +6,11 @@ Una API REST desarrollada en Java con Spring Boot para la gestión de franquicia
 
 - **Arquitectura Hexagonal**: Separación clara entre dominio, aplicación e infraestructura
 - **Programación Reactiva**: Implementada con Spring WebFlux y MongoDB Reactive
-- **Base de Datos**: MongoDB con Spring Data MongoDB Reactive  
+- **Base de Datos**: MongoDB con Spring Data MongoDB Reactive
 - **Documentación API**: Swagger/OpenAPI 3.0
 - **Testing**: Pruebas unitarias e integración con TestContainers
 - **Containerización**: Docker y Docker Compose
+- **Despliegue en la Nube**: Optimizado para Render con configuración mínima
 - **Validación**: Bean Validation con anotaciones personalizadas
 
 ## 📋 Prerrequisitos
@@ -26,7 +27,7 @@ Para ejecutar este proyecto necesitas:
 ### Clonar el Repositorio
 
 ```bash
-git clone <url-del-repositorio>
+git clone https://github.com/Rik4rd0/Franchise-API.git
 cd franchise-api
 ```
 

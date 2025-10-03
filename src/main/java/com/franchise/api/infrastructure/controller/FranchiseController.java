@@ -86,14 +86,11 @@ public class FranchiseController {
        public Mono<BranchResponse> addBranch(
                @PathVariable String franchiseId,
                @Valid @RequestBody AddBranchCommand command) {
-           // Crear comando solo con name y franchiseId
            AddBranchCommand commandWithFranchiseId = new AddBranchCommand(
                    command.name(),
                    franchiseId
            );
-           return addBranchUseCase.execute(commandWithFranchiseId)
-                   .onErrorMap(IllegalArgumentException.class,
-                       ex -> new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage()));
+           return addBranchUseCase.execute(commandWithFranchiseId);
        }
 
 

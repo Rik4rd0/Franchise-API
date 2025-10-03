@@ -1,5 +1,8 @@
-package com.franchise.api.domain.entity;
+package com.franchise.api.entity;
 
+import com.franchise.api.domain.entity.Branch;
+import com.franchise.api.domain.entity.Franchise;
+import com.franchise.api.domain.entity.Product;
 import com.franchise.api.domain.exception.BusinessRuleException;
 import com.franchise.api.domain.vo.BranchName;
 import com.franchise.api.domain.vo.FranchiseName;

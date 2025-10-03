@@ -18,10 +18,13 @@ public record Franchise(
         FranchiseName name,
         List<Branch> branches
 ) {
-    // Constructor canónico con validación
     public Franchise {
-        Objects.requireNonNull(id, "El ID de la franquicia no puede ser nulo.");
-        Objects.requireNonNull(name, "El nombre de la franquicia no puede ser nulo.");
+        if (id == null) {
+            throw new IllegalArgumentException("El ID de la franquicia no puede ser nulo.");
+        }
+        if (name == null) {
+            throw new IllegalArgumentException("El nombre de la franquicia no puede ser nulo.");
+        }
         branches = branches != null ? List.copyOf(branches) : List.of();
     }
 
