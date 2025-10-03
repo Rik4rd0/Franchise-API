@@ -1,0 +1,54 @@
+# Archivo de seguridad - Agregar estas líneas al .gitignore principal
+
+# ========================
+# ARCHIVOS DE SEGURIDAD
+# ========================
+
+# Variables de entorno con credenciales sensibles
+.env
+.env.local
+.env.production
+.env.staging
+*.env
+
+# Scripts con credenciales hardcodeadas
+scripts/setup-env-prod.sh
+scripts/setup-env-prod.ps1
+**/credentials.*
+**/secrets.*
+
+# Archivos de configuración con credenciales
+application-*.properties
+!application-docker.properties
+!application-prod.properties
+config/database.properties
+config/mongodb.properties
+
+# Archivos de respaldo que pueden contener datos sensibles
+*.backup
+*.bak
+*.dump
+*.sql
+
+# Llaves privadas y certificados
+*.key
+*.pem
+*.p12
+*.jks
+*.keystore
+*.truststore
+
+# Logs que pueden contener información sensible
+logs/
+*.log
+!.gitkeep
+
+# ========================
+# RECOMENDACIONES
+# ========================
+
+# 1. Nunca subir credenciales reales al repositorio
+# 2. Usar variables de entorno para todos los secrets
+# 3. Usar servicios de gestión de secrets en producción
+# 4. Revisar commits antes de subirlos con: git diff --cached
+# 5. Configurar pre-commit hooks para detectar secrets

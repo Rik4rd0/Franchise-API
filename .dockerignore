@@ -1,0 +1,22 @@
+# Directorios de Build
+target/
+build/
+**/*.jar
+**/*.war
+**/*.zip
+
+# IDE y configuraciones de Maven
+.mvn/
+.idea/
+.vscode/
+mvnw
+mvnw.cmd
+.settings/
+.project
+.classpath
+
+# Git y Logs
+.git
+.gitignore
+*.log
+log/

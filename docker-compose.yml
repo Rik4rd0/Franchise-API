@@ -1,0 +1,80 @@
+version: '3.8'
+
+services:
+  # Servicio de la aplicación Spring Boot
+  app:
+    container_name: franchise-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    environment:
+      # Configuración de MongoDB para Docker
+      SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/franchise-api-db
+      SPRING_PROFILES_ACTIVE: docker
+      # Variables adicionales para optimización
+      JAVA_OPTS: "-Xmx512m -Xms256m -server"
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - franchise-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # Servicio de MongoDB
+  mongodb:
+    image: mongo:7.0
+    container_name: franchise-mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin123
+      MONGO_INITDB_DATABASE: franchise-api-db
+    volumes:
+      - mongodb_data:/data/db
+      - ./docker/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    networks:
+      - franchise-network
+    restart: unless-stopped
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # Mongo Express para administración (opcional, solo para desarrollo)
+  mongo-express:
+    image: mongo-express:1.0.0
+    container_name: franchise-mongo-express
+    ports:
+      - "8082:8081"
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: admin123
+      ME_CONFIG_MONGODB_URL: mongodb://admin:admin123@mongodb:27017/
+      ME_CONFIG_BASICAUTH: false
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - franchise-network
+    restart: unless-stopped
+    profiles:
+      - dev
+
+volumes:
+  mongodb_data:
+    driver: local
+
+networks:
+  franchise-network:
+    driver: bridge

@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  # Servicio de la aplicación Spring Boot para producción
+  app:
+    container_name: franchise-api-prod
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "${PORT:-8081}:8081"
+    environment:
+      # Configuración usando variables de entorno del sistema
+      SPRING_DATA_MONGODB_URI: ${MONGODB_URI}
+      SPRING_PROFILES_ACTIVE: prod
+      JAVA_OPTS: ${JAVA_OPTS:--Xmx512m -Xms256m -server}
+      PORT: 8081
+    networks:
+      - franchise-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    # Limitar recursos en producción
+    deploy:
+      resources:
+        limits:
+          memory: 1g
+        reservations:
+          memory: 512m
+
+networks:
+  franchise-network:
+    driver: bridge
+
+# Nota: Este archivo debe ser usado con un archivo .env que contenga:
+# MONGODB_URI=mongodb+srv://usuario:password@cluster.mongodb.net/database?retryWrites=true&w=majority
+# JAVA_OPTS=-Xmx512m -Xms256m -server
+# PORT=8081

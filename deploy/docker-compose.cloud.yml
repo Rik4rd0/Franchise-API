@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  franchise-api:
+    image: ghcr.io/tu-usuario/franchise-api:latest
+    container_name: franchise-api-cloud
+    ports:
+      - "80:8081"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - MONGODB_URI=${MONGODB_URI}
+      - JAVA_OPTS=-Xmx1g -Xms512m -server -XX:+UseG1GC
+      - SERVER_PORT=8081
+    restart: unless-stopped
+    
+    # Health check
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    
+    # Logging configuration
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          memory: 1.5g
+          cpus: '1.0'
+        reservations:
+          memory: 512m
+          cpus: '0.5'
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    
+    # Security
+    security_opt:
+      - no-new-privileges:true
+    read_only: false
+    
+    networks:
+      - franchise-network
+
+networks:
+  franchise-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
