@@ -1,9 +1,57 @@
-# Franchise API
+# Franchise  Management API
 
-> **Nota:** Sí, si otro desarrollador clona el proyecto, crea el archivo `.env` con las variables necesarias (por ejemplo, `DB_PASSWORD`), y ejecuta el script `scripts/build-and-run.sh dev` o `scripts/run-local.sh`, la aplicación debería correr automáticamente en Docker, conectándose a MongoDB Atlas y exponiendo la API en el puerto configurado.
->
-> Además, la imagen Docker está publicada en **Docker Hub** y puedes ejecutarla directamente usando:  
-> `ricardo026/franchise-api:latest`
+> **Descripción breve:**  
+> API RESTful para la gestión de franquicias, sucursales y productos. Permite crear, consultar y administrar franquicias, sucursales y productos asociados, así como consultar productos con mayor stock. Desarrollada con Spring Boot WebFlux y MongoDB, documentada con Swagger y lista para ejecutarse en Docker.
+
+## 📝 Instrucciones para Evaluar la Solución
+
+1. **Preparar el entorno**  
+   - Clona el repositorio o descarga el proyecto.
+   - Solicita el archivo `.env` (Adjuntado en el correo).
+   - Coloca el archivo `.env` en la raíz del proyecto.
+
+2. **Ejecutar la aplicación en Docker**  
+   - Asegúrate de tener Docker instalado.
+   - Ejecuta el contenedor usando la imagen publicada en Docker Hub:  
+     [`ricardo026/franchise-api`](https://hub.docker.com/r/ricardo026/franchise-api)
+   - Usa el siguiente comando (ajusta las variables según tu `.env`):
+
+     ```bash
+     docker run -d \
+       --name franchise-api \
+       -p 8081:8081 \
+       -e SPRING_PROFILES_ACTIVE=prod \
+       -e DB_PASSWORD="TU_PASSWORD" \
+       -e MONGODB_URI="TU_URI_MONGODB" \
+       ricardo026/franchise-api:latest
+     ```
+
+   - El puerto expuesto es **8081**.
+
+3. **Probar la funcionalidad**  
+   - Accede a la documentación interactiva en Swagger:  
+     [http://localhost:8081/swagger-ui.html](http://localhost:8081/swagger-ui.html)
+   - Usa Swagger para guiarte y probar todos los endpoints y funcionalidades.
+
+4. **Variables de entorno**  
+   - La aplicación utiliza variables como:
+     - `DB_PASSWORD`
+     - `MONGODB_URI`
+     - `SPRING_PROFILES_ACTIVE`
+     - `PORT` (por defecto 8081)
+   - Todas deben estar definidas en el archivo `.env` en la raíz.
+
+5. **Scripts de ejecución**  
+   - Puedes ejecutar los scripts incluidos en la carpeta `scripts` para facilitar la ambientación.
+   - Si lo prefieres, puedes pedir los scripts y el `.env` por correo.
+
+---
+
+> **Nota:**  
+> La imagen Docker está publicada en Docker Hub y lista para usarse.  
+> Solo necesitas el archivo `.env` y seguir las instrucciones anteriores para levantar la API y evaluarla correctamente.
+
+---
 
 ## 🚩 Presentación de la Prueba Técnica
 
@@ -12,6 +60,8 @@ Esta aplicación está **empaquetada en Docker** y lista para ejecutarse en cual
 ---
 
 ## 🐳 Ejecución Rápida con Docker
+
+> **Puerto principal:** La API se expone por defecto en el puerto **8081**.
 
 ### 1. Prerrequisitos
 
@@ -30,7 +80,7 @@ MONGODB_URI=mongodb+srv://usuario:password@cluster.mongodb.net/franchise-api-db
 
 ### 3. Ejecutar la aplicación con Docker
 
-Solo necesitas este comando para levantar la API:
+Solo necesitas este comando para levantar la API en el puerto **8081**:
 
 ```bash
 docker run -d \
@@ -351,95 +401,6 @@ La aplicación incluye endpoints de salud:
 - **Health**: `GET /actuator/health`
 - **Info**: `GET /actuator/info`
 
-## 🐳 Docker
-
-### Construir Imagen
-
-```bash
-docker build -t franchise-api .
-```
-
-### Ejecutar Contenedor
-
-```bash
-docker run -p 8081:8081 \
-  -e SPRING_DATA_MONGODB_URI=mongodb://host.docker.internal:27017/franchise-api-db \
-  franchise-api
-```
-
-### Docker Compose Comandos Útiles
-
-```bash
-# Ver logs de un servicio específico
-docker-compose logs -f app
-
-# Ejecutar comando en contenedor
-docker-compose exec app bash
-
-# Escalar servicios
-docker-compose up --scale app=2
-
-# Reconstruir imagen específica
-docker-compose build app
-```
-
-### GitHub Container Registry
-
-La aplicación se empaqueta automáticamente en Docker y se sube a GitHub Container Registry mediante GitHub Actions.
-
-```bash
-# La imagen estará disponible en:
-# ghcr.io/tu-usuario/franchise-api:latest
-```
-
-## 🐳 Publicar y ejecutar la aplicación desde Docker Hub
-
-### 1. Subir la imagen a Docker Hub
-
-1. Inicia sesión en Docker Hub:
-   ```bash
-   docker login
-   ```
-2. Construye la imagen:
-   ```bash
-   docker build -t ricardo026/franchise-api:latest .
-   ```
-3. Sube la imagen:
-   ```bash
-   docker push ricardo026/franchise-api:latest
-   ```
-
-### 2. Ejecutar la aplicación en cualquier máquina
-
-Solo necesitas tener Docker instalado. Ejecuta el siguiente comando:
-
-```bash
-docker run -d \
-  --name franchise-api \
-  -p 8081:8081 \
-  -e SPRING_PROFILES_ACTIVE=prod \
-  -e MONGODB_URI="TU_URI_MONGODB" \
-  ricardo026/franchise-api:latest
-```
-
-**Variables de entorno necesarias:**
-- `MONGODB_URI`: URI de conexión a MongoDB (Atlas o local)
-- `DB_PASSWORD`: (opcional, si tu base lo requiere)
-- `SPRING_PROFILES_ACTIVE`: `prod` para producción
-
-La API estará disponible en [http://localhost:8081](http://localhost:8081)
-
-## 📊 Monitoreo y Logs
-
-### Logs de la Aplicación
-
-```bash
-# Con Docker Compose
-docker-compose logs -f app
-
-# En desarrollo local
-tail -f logs/application.log
-```
 
 ### MongoDB Logs
 

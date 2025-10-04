@@ -21,10 +21,10 @@ docker rm franchise-api-local 2>/dev/null || true
 # Ejecutar nuevo contenedor
 docker run -d \
   --name franchise-api-local \
-  -p 8083:8083 \
+  -p 8081:8081 \
   -e SPRING_PROFILES_ACTIVE=dev \
   -e DB_PASSWORD="${DB_PASSWORD}" \
-  -e PORT=8083 \
+  -e PORT=8081 \
   ${DOCKER_USERNAME}/${IMAGE_NAME}:${TAG}
 
 if [ $? -eq 0 ]; then
