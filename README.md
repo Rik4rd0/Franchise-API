@@ -14,16 +14,16 @@
    - Asegúrate de tener Docker instalado.
    - Ejecuta el contenedor usando la imagen publicada en Docker Hub:  
      [`ricardo026/franchise-api`](https://hub.docker.com/r/ricardo026/franchise-api)
-   - Usa el siguiente comando (ajusta las variables según tu `.env`):
+   - Usa el siguiente comando (ajusta las variables según el `.env`) que las encontrara en el archivo `.env.example`:
 
      ```bash
      docker run -d \
-       --name franchise-api \
-       -p 8081:8081 \
-       -e SPRING_PROFILES_ACTIVE=prod \
-       -e DB_PASSWORD="TU_PASSWORD" \
-       -e MONGODB_URI="TU_URI_MONGODB" \
-       ricardo026/franchise-api:latest
+--name franchise-api \
+-p 8081:8081 \
+-e SPRING_PROFILES_ACTIVE=dev \
+-e DB_PASSWORD:{ DB_PASSWORD }\
+-e "MONGODB_URI=mongodb+srv://rickmartinezbanda_db_user:{ DB_PASSWORD }@franchise-api-dev.rz2dpuc.mongodb.net/franchise-api-db-dev?retryWrites=true&w=majority&appName=franchise-api-dev" \
+ricardo026/franchise-api:latest
      ```
 
    - El puerto expuesto es **8081**.
@@ -67,33 +67,12 @@ Esta aplicación está **empaquetada en Docker** y lista para ejecutarse en cual
 - Tener **Docker** instalado ([Descargar Docker Desktop](https://www.docker.com/products/docker-desktop/))
 - Obtener las credenciales de MongoDB Atlas (o usar las de prueba si están incluidas en `.env`)
 
-### 2. Descargar el archivo `.env` (si aplica)
-
-Solicita el archivo `.env` al desarrollador si necesitas conectarte a una base de datos protegida.
-
-Ejemplo de `.env`:
+### 2. Crear archivo `.env`
+Crea un archivo `.env` en la raíz del proyecto con las siguientes variables (ajusta según tus credenciales o toma el .env.example):
 ```
 DB_PASSWORD=tu_password_mongodb
 MONGODB_URI=mongodb+srv://usuario:password@cluster.mongodb.net/franchise-api-db
 ```
-
-### 3. Ejecutar la aplicación con Docker
-
-Solo necesitas este comando para levantar la API en el puerto **8081**:
-
-```bash
-docker run -d \
-  --name franchise-api \
-  -p 8081:8081 \
-  -e SPRING_PROFILES_ACTIVE=prod \
-  -e DB_PASSWORD="TU_PASSWORD" \
-  -e MONGODB_URI="TU_URI_MONGODB" \
-  ricardo026/franchise-api:latest
-```
-
-> Cambia `"TU_PASSWORD"` y `"TU_URI_MONGODB"` por tus valores reales.
-
-La API estará disponible en: [http://localhost:8081](http://localhost:8081)
 
 #### Verificar estado
 
@@ -214,14 +193,6 @@ mvn test -Dtest="**/*Test"
 ```bash
 mvn test -Dtest="**/*IntegrationTest"
 ```
-
-### Reporte de Cobertura
-
-```bash
-mvn jacoco:report
-```
-
-El reporte estará disponible en: `target/site/jacoco/index.html`
 
 ## 📚 Documentación de la API
 
