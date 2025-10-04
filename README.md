@@ -14,6 +14,10 @@
    - Asegúrate de tener Docker instalado.
    - Ejecuta el contenedor usando la imagen publicada en Docker Hub:  
      [`ricardo026/franchise-api`](https://hub.docker.com/r/ricardo026/franchise-api)
+     realiza pull a la imagen docker: 
+     ```bash
+     docker pull ricardo026/franchise-api:dev
+     ```
    - Usa el siguiente comando (ajusta las variables según el `.env`) que las encontrara en el archivo `.env.example`:
 
      ```bash
