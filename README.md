@@ -18,12 +18,13 @@
 
      ```bash
      docker run -d \
---name franchise-api \
--p 8081:8081 \
--e SPRING_PROFILES_ACTIVE=dev \
--e DB_PASSWORD:{ DB_PASSWORD }\
--e "MONGODB_URI=mongodb+srv://rickmartinezbanda_db_user:{ DB_PASSWORD }@franchise-api-dev.rz2dpuc.mongodb.net/franchise-api-db-dev?retryWrites=true&w=majority&appName=franchise-api-dev" \
-ricardo026/franchise-api:latest
+     -name franchise-api \
+     -p 8081:8081 \
+     -e SPRING_PROFILES_ACTIVE=dev \
+     -e DB_PASSWORD:{ DB_PASSWORD }\
+     -e "MONGODB_URI=mongodb+srv://rickmartinezbanda_db_user:{ DB_PASSWORD }@franchise-api-dev.rz2dpuc.mongodb.net/franchise-api-db-dev?retryWrites=true&w=majority&appName=franchise-api-dev" \
+     ricardo026/franchise-api:latest
+     
      ```
 
    - El puerto expuesto es **8081**.
