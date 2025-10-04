@@ -7,8 +7,8 @@
 
 1. **Preparar el entorno**  
    - Clona el repositorio o descarga el proyecto.
-   - Solicita el archivo `.env` (Adjuntado en el correo).
-   - Coloca el archivo `.env` en la raíz del proyecto.
+   - El archivo `.env.example` contiene un ejemplo de las variables de entorno necesarias.
+   - Copia el archivo `.env.example` como `.env` y colócalo en la raíz del proyecto.
 
 2. **Ejecutar la aplicación en Docker**  
    - Asegúrate de tener Docker instalado.
@@ -43,7 +43,6 @@
 
 5. **Scripts de ejecución**  
    - Puedes ejecutar los scripts incluidos en la carpeta `scripts` para facilitar la ambientación.
-   - Si lo prefieres, puedes pedir los scripts y el `.env` por correo.
 
 ---
 
@@ -327,6 +326,36 @@ PORT=8081
 SPRING_PROFILES_ACTIVE=prod
 MONGODB_URI=mongodb+srv://usuario:password@cluster.mongodb.net/franchise-api-db
 ```
+
+---
+
+## 📂 Ubicación de los scripts y comandos de ejecución
+
+Los scripts para ejecutar la aplicación se encuentran en la carpeta `scripts` en la raíz del proyecto.
+
+### Comandos disponibles:
+
+- **Ejecutar en modo desarrollo con Docker Compose:**
+  ```bash
+  ./scripts/docker-compose-run.sh dev
+  ```
+
+- **Ejecutar en modo producción con Docker Compose:**
+  ```bash
+  ./scripts/docker-compose-run.sh prod
+  ```
+
+- **Ejecutar localmente con MongoDB Atlas:**
+  ```bash
+  ./scripts/run-local.sh
+  ```
+
+- **Ejecutar en modo producción con MongoDB Atlas:**
+  ```bash
+  ./scripts/run-prod.sh
+  ```
+
+Asegúrate de tener el archivo `.env` correctamente configurado en la raíz antes de ejecutar cualquier script.
 
 ---
 

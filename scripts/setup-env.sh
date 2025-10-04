@@ -7,7 +7,7 @@ echo "Configurando variables de entorno para Franchise API..."
 
 # Variables de entorno requeridas
 export MONGODB_URI="mongodb+srv://rickmartinezbanda_db_user:5SedZCxKjx8mrhf4@franchise-api-dev.rz2dpuc.mongodb.net/Franchise-API-db?retryWrites=true&w=majority&appName=franchise-api-dev"
-export SPRING_PROFILES_ACTIVE="prod"
+export SPRING_PROFILES_ACTIVE="dev"
 export PORT="8081"
 
 # Variables opcionales para optimización
